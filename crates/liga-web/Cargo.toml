@@ -1,0 +1,25 @@
+[package]
+name = "liga-web"
+description = "Liga web layer: Axum integration, consistent JSON errors, safe default middleware and a test client."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[dependencies]
+axum = { workspace = true, features = ["tokio", "http1", "json", "query", "matched-path"] }
+liga-core.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+tokio = { workspace = true, features = ["net", "rt", "sync", "time"] }
+tower = { workspace = true, features = ["util"] }
+tracing.workspace = true
+uuid.workspace = true
+
+[dev-dependencies]
+tokio = { workspace = true, features = ["macros", "rt", "time"] }
+
+[lints]
+workspace = true

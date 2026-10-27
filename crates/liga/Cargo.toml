@@ -1,0 +1,35 @@
+[package]
+name = "liga"
+description = "Liga: a modular Rust backend framework uniting web APIs, explicit modules and safe AI/automation."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish.workspace = true
+
+[features]
+default = ["web", "logging"]
+web = ["dep:liga-web", "tokio/net"]
+tasks = ["dep:liga-tasks"]
+ai = ["dep:liga-ai"]
+logging = ["dep:tracing-subscriber"]
+full = ["web", "tasks", "ai", "logging"]
+
+[dependencies]
+liga-ai = { workspace = true, optional = true }
+liga-core.workspace = true
+liga-modules.workspace = true
+liga-tasks = { workspace = true, optional = true }
+liga-web = { workspace = true, optional = true }
+thiserror.workspace = true
+tokio = { workspace = true, features = ["macros", "rt", "signal", "sync", "time"] }
+tracing.workspace = true
+tracing-subscriber = { workspace = true, optional = true, features = ["ansi", "env-filter", "fmt", "std"] }
+
+[dev-dependencies]
+serde.workspace = true
+serde_json.workspace = true
+tokio = { workspace = true, features = ["io-util", "macros", "net", "rt", "rt-multi-thread", "time"] }
+
+[lints]
+workspace = true

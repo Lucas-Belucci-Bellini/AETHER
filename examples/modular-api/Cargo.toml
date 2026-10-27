@@ -1,0 +1,21 @@
+[package]
+name = "modular-api"
+description = "Liga modules talking through typed events, with retried background tasks."
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+publish = false
+
+[dependencies]
+liga = { workspace = true, features = ["web", "tasks", "logging"] }
+serde.workspace = true
+tokio = { workspace = true, features = ["macros", "rt-multi-thread", "time"] }
+tracing.workspace = true
+
+[dev-dependencies]
+serde_json.workspace = true
+tokio = { workspace = true, features = ["macros", "rt", "time"] }
+
+[lints]
+workspace = true
