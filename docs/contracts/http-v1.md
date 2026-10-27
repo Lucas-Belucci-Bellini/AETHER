@@ -5,7 +5,7 @@ Status: implementation in progress. This specification is the proposed shared wi
 ## Scope
 
 - ATLAS consumes HTTP/JSON APIs from TITAN or other compatible servers.
-- TITAN is the first reference implementation for versioned endpoints, including route-level 404/405 errors in the v1 namespace.
+- TITAN is the first reference implementation for versioned endpoints, including route-level 404/405 and timeout responses under `/api/v1`.
 - AETHER can host application routes and orchestrate modules, but remains independently usable.
 - Existing unversioned routes are not changed by this contract.
 
@@ -71,6 +71,6 @@ Expected status: `200 OK`. The reference TITAN implementation returns `data.mess
 ## Implementation status
 
 - AETHER `liga-web` now exposes typed success and error-envelope wire types. Existing global `ApiError` responses are not automatically rewritten.
-- TITAN `GET /api/v1/hello` is the reference success endpoint; versioned 404/405 handling is being added separately from legacy routes.
-- ATLAS has a browser client; only versioned error envelopes should be interpreted using the family-specific `error.code` / `error.message` fields.
-- Cross-repository adapter/conformance tests and browser-level verification remain required before production use. Re-run CI after the latest coordinated changes before treating these changes as validated.
+- TITAN `GET /api/v1/hello` is the reference success endpoint; versioned 404/405 and timeout responses are covered by integration tests, while unversioned routes retain legacy error shapes.
+- ATLAS has a browser client that interprets `error.code` / `error.message` only when the response identifies contract v1. The `hello-web` example demonstrates both success and a deliberate v1 404.
+- CI verifies the Rust/WASM build paths, but cross-repository automated conformance tests and manual browser verification remain required before production use.
