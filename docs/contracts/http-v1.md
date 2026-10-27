@@ -58,7 +58,8 @@ Error envelopes are not yet unified across all three codebases. Existing AETHER 
 ## Implementation status
 
 - Contract documentation: proposed in all three repositories.
-- TITAN `GET /api/v1/hello`: being added with a dedicated integration test.
-- ATLAS typed browser client: not implemented by this document.
-- AETHER adapter or conformance tests: not implemented by this document.
+- TITAN `GET /api/v1/hello`: added in the coordinated branch with a dedicated integration test; test execution is pending.
+- AETHER `liga-web` exposes `ApiEnvelope<T>` and `ApiMeta`, with a serialization unit test added; it is not yet used by every existing route.
+- ATLAS browser client: added in the coordinated branch; browser/WASM verification is pending.
+- AETHER-to-TITAN adapter and cross-repository conformance tests: still absent.
 - Tests/builds: not run by the authoring action; verify through CI or local execution before claiming success.
