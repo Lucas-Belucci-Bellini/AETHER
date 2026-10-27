@@ -51,7 +51,7 @@ async fn main() -> Result<(), liga::Error> {
 |---|---|---|
 | Núcleo | `liga-core` | Config em camadas (defaults < arquivo < ambiente) validada no startup, `AppContext`, estado tipado, `Shutdown`, `Secret<T>` |
 | Módulos | `liga-modules` | Trait `Module`, ordenação topológica, detecção de duplicatas, dependências ausentes e ciclos, start com rollback, shutdown reverso, barramento de eventos em memória |
-| Web | `liga-web` | Axum + Tokio, envelope JSON único para erros, extractors com rejeições consistentes, request-id, tracing, timeout, limite de concorrência e de corpo, `TestClient` sem porta |
+| Web | `liga-web` | Axum + Tokio, envelope JSON para erros, `ApiEnvelope<T>`/`ApiMeta` para sucesso versionado v1, extractors consistentes, request-id, tracing, timeout, limites e `TestClient` sem porta |
 | Automação | `liga-tasks` | Runner local com concorrência limitada, timeout por tentativa, retry só para erros transitórios (backoff exponencial + jitter), cancelamento e shutdown com prazo |
 | IA | `liga-ai` | `ModelProvider` neutro, `Tool` tipada com permissões, `Policy` deny-by-default, `Agent` limitado por passos, tempo, chamadas e tamanho, `ScriptedProvider` para testes |
 | Facade | `liga` | `Application::builder()`, `prelude`, features `web` (padrão), `logging` (padrão), `tasks`, `ai` e `full` |
