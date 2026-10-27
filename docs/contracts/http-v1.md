@@ -11,9 +11,9 @@ Status: implementation in progress. This specification is the proposed shared wi
 
 ## Successful response envelope
 
-Versioned endpoints should return JSON shaped like:
+Versioned successful endpoints return JSON shaped like:
 
-```json
+\`\`\`json
 {
   "data": {
     "message": "Olá do TITAN!",
@@ -23,29 +23,42 @@ Versioned endpoints should return JSON shaped like:
     "api_version": "v1"
   }
 }
-```
+\`\`\`
 
 Rules:
-- `data` contains the route-specific response.
-- `meta.api_version` is the literal API version, currently `v1`.
-- Clients must ignore unknown fields for forward-compatible additions unless a schema says otherwise.
+- \`data\` contains the route-specific response.
+- \`meta.api_version\` is the literal API version, currently \`v1\`.
+- Clients should ignore unknown additive fields unless a schema explicitly says otherwise.
 - JSON field names are snake_case.
-- Content type is `application/json`.
+- Content type is \`application/json\`.
+
+## Versioned error envelope
+
+The wire contract for errors explicitly handled by a v1 route is:
+
+\`\`\`json
+{
+  "error": {
+    "code": "not_found",
+    "message": "recurso não encontrado"
+  },
+  "meta": {
+    "api_version": "v1"
+  }
+}
+\`\`\`
+
+- \`error.code\` is stable and intended for programmatic handling.
+- \`error.message\` is safe display text; it must not contain stack traces, secrets, SQL, or internal diagnostics.
+- The HTTP status remains authoritative. Clients must not infer success from the body alone.
+- Frameworks may have additional legacy error fields outside this minimal contract. Do not assume every existing route has opted in.
+- Request correlation uses the \`x-request-id\` response header when available.
 
 ## First reference endpoint
 
-`GET /api/v1/hello`
+\`GET /api/v1/hello\`
 
-Expected status: `200 OK`.
-
-The reference TITAN implementation returns `data.message`, `data.environment` and `meta.api_version`. The endpoint is a contract smoke test, not a production health or readiness probe.
-
-## Errors and request IDs
-
-Error envelopes are not yet unified across all three codebases. Existing AETHER and TITAN error formats differ. Until an explicit compatibility change is reviewed:
-- clients must handle non-2xx status codes without assuming one exact error body;
-- clients may use `x-request-id` for support diagnostics when supplied;
-- never log credentials or sensitive request/response bodies.
+Expected status: \`200 OK\`. The reference TITAN implementation returns \`data.message\`, \`data.environment\` and \`meta.api_version\`. The endpoint is a contract smoke test, not a production health or readiness probe.
 
 ## Security and compatibility
 
@@ -57,9 +70,7 @@ Error envelopes are not yet unified across all three codebases. Existing AETHER 
 
 ## Implementation status
 
-- Contract documentation: proposed in all three repositories.
-- TITAN `GET /api/v1/hello`: added in the coordinated branch with a dedicated integration test; test execution is pending.
-- AETHER `liga-web` exposes `ApiEnvelope<T>` and `ApiMeta`, with a serialization unit test added; it is not yet used by every existing route.
-- ATLAS browser client: added in the coordinated branch; browser/WASM verification is pending.
-- AETHER-to-TITAN adapter and cross-repository conformance tests: still absent.
-- Tests/builds: not run by the authoring action; verify through CI or local execution before claiming success.
+- AETHER \`liga-web\` now exposes typed success and error-envelope wire types. Existing global \`ApiError\` responses are not automatically rewritten.
+- TITAN \`GET /api/v1/hello\` is the reference success endpoint; versioned 404/405 handling is being added separately from legacy routes.
+- ATLAS has a browser client; only versioned error envelopes should be interpreted using the family-specific \`error.code\` / \`error.message\` fields.
+- Cross-repository adapter/conformance tests and browser-level verification remain required before production use.
