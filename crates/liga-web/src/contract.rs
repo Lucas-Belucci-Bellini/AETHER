@@ -5,7 +5,7 @@ use serde::{Deserialize, Serialize};
 /// Metadata carried by a versioned HTTP response.
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
 pub struct ApiMeta {
-    /// Version of the HTTP/JSON contract, for example \`v1\`.
+    /// Version of the HTTP/JSON contract, for example `v1`.
     pub api_version: String,
 }
 
