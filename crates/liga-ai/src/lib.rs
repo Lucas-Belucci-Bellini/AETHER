@@ -50,19 +50,36 @@ pub type AetherToolCallRecord = ToolCallRecord;
 pub type LigaAgent = AetherAgent;
 
 pub use message::{Message, Role, ToolCall, Usage};
-pub use message::{
-    Message as AetherMessage, Role as AetherRole, ToolCall as AetherToolCall, Usage as AetherUsage,
-};
+/// Official Aether name for a model message.
+pub use message::Message as AetherMessage;
+/// Official Aether name for a conversation role.
+pub use message::Role as AetherRole;
+/// Official Aether name for a model tool call.
+pub use message::ToolCall as AetherToolCall;
+/// Official Aether name for model usage statistics.
+pub use message::Usage as AetherUsage;
 pub use policy::Policy;
+/// Official Aether name for an agent permission policy.
 pub use policy::Policy as AetherPolicy;
 pub use provider::{ModelProvider, ModelRequest, ModelResponse, ProviderError, ProviderErrorKind};
-pub use provider::{
-    ModelProvider as AetherModelProvider, ModelRequest as AetherModelRequest,
-    ModelResponse as AetherModelResponse, ProviderError as AetherProviderError,
-    ProviderErrorKind as AetherProviderErrorKind,
-};
+/// Official Aether name for model provider adapters.
+pub use provider::ModelProvider as AetherModelProvider;
+/// Official Aether name for a model request.
+pub use provider::ModelRequest as AetherModelRequest;
+/// Official Aether name for a model response.
+pub use provider::ModelResponse as AetherModelResponse;
+/// Official Aether name for provider errors.
+pub use provider::ProviderError as AetherProviderError;
+/// Official Aether name for provider error categories.
+pub use provider::ProviderErrorKind as AetherProviderErrorKind;
 pub use tool::{Permission, Tool, ToolContext, ToolError, ToolSpec};
-pub use tool::{
-    Permission as AetherPermission, Tool as AetherTool, ToolContext as AetherToolContext,
-    ToolError as AetherToolError, ToolSpec as AetherToolSpec,
-};
+/// Official Aether name for tool permission declarations.
+pub use tool::Permission as AetherPermission;
+/// Official Aether name for a callable tool.
+pub use tool::Tool as AetherTool;
+/// Official Aether name for a tool execution context.
+pub use tool::ToolContext as AetherToolContext;
+/// Official Aether name for tool execution errors.
+pub use tool::ToolError as AetherToolError;
+/// Official Aether name for a tool specification.
+pub use tool::ToolSpec as AetherToolSpec;
