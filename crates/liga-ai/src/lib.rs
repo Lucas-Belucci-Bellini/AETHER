@@ -37,10 +37,13 @@ pub type AetherAgentBuilder = AgentBuilder;
 pub type AetherAgentError = AgentError;
 /// Official Aether name for AgentOutcome.
 pub type AetherAgentOutcome = AgentOutcome;
-/// Official Aether names for agent configuration and results.
+/// Official Aether name for errors building an agent.
 pub type AetherAgentBuildError = AgentBuildError;
+/// Official Aether name for agent execution limits.
 pub type AetherLimits = Limits;
+/// Official Aether name for a tool call's outcome.
 pub type AetherToolCallOutcome = ToolCallOutcome;
+/// Official Aether name for a recorded tool call.
 pub type AetherToolCallRecord = ToolCallRecord;
 
 /// Compatibility alias for the previous public branding.
