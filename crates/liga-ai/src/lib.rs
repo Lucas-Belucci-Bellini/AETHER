@@ -31,6 +31,12 @@ pub use agent::{
 
 /// Official Aether name for Agent.
 pub type AetherAgent = Agent;
+/// Official Aether name for AgentBuilder.
+pub type AetherAgentBuilder = AgentBuilder;
+/// Official Aether name for AgentError.
+pub type AetherAgentError = AgentError;
+/// Official Aether name for AgentOutcome.
+pub type AetherAgentOutcome = AgentOutcome;
 /// Compatibility alias for the previous public branding.
 pub type LigaAgent = AetherAgent;
 pub use message::{Message, Role, ToolCall, Usage};
