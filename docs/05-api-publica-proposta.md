@@ -8,9 +8,9 @@ Os trechos abaixo compilam: todos foram tirados do código e dos exemplos, que `
 use liga::prelude::*;
 
 #[tokio::main]
-async fn main() -> Result<(), liga::Error> {
+async fn main() -> Result<(), liga::AetherError> {
     liga::init_tracing();
-    Application::builder()
+    AetherApplication::builder()
         .name("catalog-api")
         .optional_config_file("catalog.toml")
         .env_prefix("CATALOG")               // CATALOG__SERVER__ADDR=0.0.0.0:8080
@@ -28,13 +28,28 @@ Em testes, `app.test_client()` exercita o router inteiro sem abrir porta, e `app
 
 ## Módulos
 
+O trait oficial exportado para novos códigos se chama `AetherModule`. O nome genérico `Module` continua disponível para compatibilidade.
+
 ```rust
-pub trait Module: Send + Sync + 'static {
-    fn name(&self) -> &'static str;
+impl AetherModule for CatalogModule {
+    fn name(&self) -> &'static str { "catalog" }
+
     fn dependencies(&self) -> &'static [&'static str] { &[] }
-    fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> { Ok(()) }
-    fn start(&self, ctx: &AppContext) -> impl Future<Output = Result<(), ModuleError>> + Send;
-    fn shutdown(&self, ctx: &AppContext) -> impl Future<Output = Result<(), ModuleError>> + Send;
+
+    fn register(
+        &self,
+        ctx: &mut AetherModuleContext<'_>,
+    ) -> Result<(), AetherModuleError> {
+        Ok(())
+    }
+
+    async fn start(&self, _ctx: &AetherAppContext) -> Result<(), AetherModuleError> {
+        Ok(())
+    }
+
+    async fn shutdown(&self, _ctx: &AetherAppContext) -> Result<(), AetherModuleError> {
+        Ok(())
+    }
 }
 ```
 
@@ -86,8 +101,10 @@ runner.shutdown(Duration::from_secs(5)).await; // drena; cancela o que passar do
 
 ## IA e ferramentas
 
+O agente principal é exposto como `AetherAgent`; `Agent` continua disponível como nome compatível.
+
 ```rust
-let agent = Agent::builder()
+let agent = AetherAgent::builder()
     .provider(model)                                  // qualquer ModelProvider
     .tool(ReadProjectStatus)                          // declara Permission "project.read"
     .tool(CreateTicket { tickets })                   // declara Permission "tickets.write"
