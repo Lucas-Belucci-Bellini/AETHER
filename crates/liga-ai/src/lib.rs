@@ -48,8 +48,7 @@ pub type LigaAgent = AetherAgent;
 
 pub use message::{Message, Role, ToolCall, Usage};
 pub use message::{
-    Message as AetherMessage, Role as AetherRole, ToolCall as AetherToolCall,
-    Usage as AetherUsage,
+    Message as AetherMessage, Role as AetherRole, ToolCall as AetherToolCall, Usage as AetherUsage,
 };
 pub use policy::Policy;
 pub use policy::Policy as AetherPolicy;
