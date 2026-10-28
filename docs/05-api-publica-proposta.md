@@ -68,13 +68,23 @@ ctx.events().subscribe(|e: Arc<AccountCreated>| async move { Ok(()) });
 
 ## Handlers
 
+Os tipos de HTTP também têm nomes oficiais prefixados. Os nomes genéricos continuam compatíveis.
+
 ```rust
-async fn show(catalog: Dep<Catalog>, Path(id): Path<u64>) -> ApiResult<Json<Product>> {
-    catalog.get(id).map(Json).ok_or_else(|| ApiError::not_found(format!("product {id} not found")))
+async fn show(
+    catalog: AetherDep<Catalog>,
+    AetherPath(id): AetherPath<u64>,
+) -> AetherApiResult<AetherJson<Product>> {
+    catalog
+        .get(id)
+        .map(AetherJson)
+        .ok_or_else(|| AetherApiError::not_found(format!("product {id} not found")))
 }
 
-async fn create(catalog: Dep<Catalog>, ValidJson(new): ValidJson<NewProduct>)
-    -> ApiResult<(StatusCode, Json<Product>)> { /* ... */ }
+async fn create(
+    catalog: AetherDep<Catalog>,
+    AetherValidJson(new): AetherValidJson<NewProduct>,
+) -> AetherApiResult<(StatusCode, AetherJson<Product>)> { /* ... */ }
 ```
 
 `Dep<T>` lê o estado tipado. `Json`, `ValidJson`, `Path` e `Query` rejeitam com o envelope padrão de erro.
@@ -91,11 +101,11 @@ A semântica está no ADR-0005: em memória, sequencial, falhas isoladas e repor
 
 ```rust
 let handle = runner.spawn(
-    TaskSpec::new("welcome-email")
+    AetherTaskSpec::new("welcome-email")
         .timeout(Duration::from_secs(10))
-        .retry(RetryPolicy::exponential(3, Duration::from_millis(50))),
-    |task: TaskContext| async move {
-        send(task.attempt()).await.map_err(|e| TaskError::transient("gateway down").with_source(e))
+        .retry(AetherRetryPolicy::exponential(3, Duration::from_millis(50))),
+    |task: AetherTaskContext| async move {
+        send(task.attempt()).await.map_err(|e| AetherTaskError::transient("gateway down").with_source(e))
     },
 )?;
 handle.status();          // Queued | Running | Retrying | Succeeded | Failed | TimedOut | Cancelled | Panicked
@@ -105,7 +115,7 @@ runner.shutdown(Duration::from_secs(5)).await; // drena; cancela o que passar do
 
 ## IA e ferramentas
 
-O agente principal é exposto como `AetherAgent`; `Agent` continua disponível como nome compatível.
+O agente principal é exposto como `AetherAgent`; `Agent` continua disponível como nome compatível. O mesmo padrão vale para `AetherModelProvider`, `AetherPolicy`, `AetherTool`, `AetherToolContext` e os tipos associados a chamadas e resultados do agente.
 
 ```rust
 let agent = AetherAgent::builder()
