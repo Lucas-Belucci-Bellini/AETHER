@@ -180,8 +180,8 @@ pub mod prelude {
     pub use crate::{
         AetherApp, AetherAppContext, AetherApplication, AetherApplicationBuilder, AetherConfig,
         AetherConfigError, AetherConfigLoader, AetherContributions, AetherDelivery, AetherError,
-        AetherEventBus, AetherEventError, AetherFieldError, AetherLifecycleOptions,
-        AetherModule, AetherModuleContext, AetherModuleError, AetherModuleSet, AetherModulesError,
+        AetherEventBus, AetherEventError, AetherFieldError, AetherLifecycleOptions, AetherModule,
+        AetherModuleContext, AetherModuleError, AetherModuleSet, AetherModulesError,
         AetherPublishError, AetherResolvedModules, AetherRunningModules, AetherSecret,
         AetherShutdown, AetherStateError, AetherStateMap, AetherSubscription, AetherValidate,
         AetherValidationErrors, App, Application, ApplicationBuilder, Error, LigaApp,
@@ -205,9 +205,9 @@ pub mod prelude {
 
     #[cfg(feature = "tasks")]
     pub use crate::{
-        AetherRetryPolicy, AetherShutdownReport, AetherSpawnError, AetherTaskContext, AetherTaskError,
-        AetherTaskFailure, AetherTaskHandle, AetherTaskId, AetherTaskRunner, AetherTaskRunnerBuilder,
-        AetherTaskSpec, AetherTaskStatus,
+        AetherRetryPolicy, AetherShutdownReport, AetherSpawnError, AetherTaskContext,
+        AetherTaskError, AetherTaskFailure, AetherTaskHandle, AetherTaskId, AetherTaskRunner,
+        AetherTaskRunnerBuilder, AetherTaskSpec, AetherTaskStatus,
     };
     #[cfg(feature = "tasks")]
     pub use liga_tasks::{RetryPolicy, TaskContext, TaskError, TaskRunner, TaskSpec};
@@ -219,6 +219,7 @@ pub mod prelude {
         AetherModelResponse, AetherPermission, AetherPolicy, AetherProviderError,
         AetherProviderErrorKind, AetherRole, AetherTool, AetherToolCall, AetherToolCallOutcome,
         AetherToolCallRecord, AetherToolContext, AetherToolError, AetherToolSpec, AetherUsage,
-        Agent, LigaAgent, ModelProvider, Permission, Policy, Tool, ToolContext, ToolError, ToolSpec,
+        Agent, LigaAgent, ModelProvider, Permission, Policy, Tool, ToolContext, ToolError,
+        ToolSpec,
     };
 }
