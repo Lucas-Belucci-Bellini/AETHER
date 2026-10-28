@@ -9,10 +9,10 @@ use liga::prelude::*;
 
 struct Hello;
 
-impl Module for Hello {
+impl AetherModule for Hello {
     fn name(&self) -> &'static str { "hello" }
 
-    fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
+    fn register(&self, ctx: &mut AetherModuleContext<'_>) -> Result<(), AetherModuleError> {
         ctx.contribute(Routes::new().route("/hello", get(|| async { "olá, AETHER" })));
         Ok(())
     }
