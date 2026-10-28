@@ -1,4 +1,4 @@
-//! # Liga
+//! # Aether
 //!
 //! A modular backend framework for Rust: start with a small HTTP API, grow
 //! into explicit modules with events, background tasks and permissioned AI
@@ -13,7 +13,7 @@
 //!     fn name(&self) -> &'static str { "hello" }
 //!
 //!     fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
-//!         ctx.contribute(Routes::new().route("/hello", get(|| async { "hello, liga" })));
+//!         ctx.contribute(Routes::new().route("/hello", get(|| async { "hello, aether" })));
 //!         Ok(())
 //!     }
 //! }
@@ -21,7 +21,7 @@
 //! #[tokio::main]
 //! async fn main() -> Result<(), liga::Error> {
 //!     liga::init_tracing();
-//!     Application::builder()
+//!     AetherApplication::builder()
 //!         .name("hello")
 //!         .env_prefix("HELLO")          // HELLO__SERVER__ADDR=0.0.0.0:8080
 //!         .module(Hello)
@@ -49,10 +49,13 @@ mod app;
 
 pub use app::{App, Application, ApplicationBuilder, Error};
 
-/// Framework-branded name for Application.
-pub type LigaApplication = Application;
-/// Framework-branded name for App.
-pub type LigaApp = App;
+/// Official Aether name for Application.
+pub type AetherApplication = Application;
+/// Official Aether name for App.
+pub type AetherApp = App;
+/// Compatibility aliases for the previous public branding.
+pub type LigaApplication = AetherApplication;
+pub type LigaApp = AetherApp;
 
 pub use liga_core as core;
 pub use liga_modules as modules;
@@ -79,7 +82,10 @@ pub fn init_tracing() {
 
 /// The names most applications need.
 pub mod prelude {
-    pub use crate::{App, Application, ApplicationBuilder, Error, LigaApp, LigaApplication};
+    pub use crate::{
+        AetherApp, AetherApplication, App, Application, ApplicationBuilder, Error, LigaApp,
+        LigaApplication,
+    };
     pub use liga_core::{AppContext, Config, Secret, Validate, ValidationErrors};
     pub use liga_modules::{EventBus, EventError, Module, ModuleContext, ModuleError};
 
@@ -95,6 +101,7 @@ pub mod prelude {
 
     #[cfg(feature = "ai")]
     pub use liga_ai::{
-        Agent, LigaAgent, ModelProvider, Permission, Policy, Tool, ToolContext, ToolError, ToolSpec,
+        AetherAgent, Agent, ModelProvider, Permission, Policy, Tool, ToolContext, ToolError,
+        ToolSpec, LigaAgent,
     };
 }
