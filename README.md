@@ -19,7 +19,7 @@ impl Module for Hello {
 }
 
 #[tokio::main]
-async fn main() -> Result<(), liga::Error> {
+async fn main() -> Result<(), liga::AetherError> {
     liga::init_tracing();
     AetherApplication::builder()
         .name("hello")
@@ -49,10 +49,10 @@ async fn main() -> Result<(), liga::Error> {
 | Pilar | Crate | O que entrega |
 |---|---|---|
 | Núcleo | `liga-core` | Config em camadas (defaults < arquivo < ambiente) validada no startup, `AppContext`, estado tipado, `Shutdown`, `Secret<T>` |
-| Módulos | `liga-modules` | Trait `Module`, ordenação topológica, detecção de duplicatas, dependências ausentes e ciclos, start com rollback, shutdown reverso, barramento de eventos em memória |
+| Módulos | `liga-modules` | Trait `AetherModule`, ordenação topológica, detecção de duplicatas, dependências ausentes e ciclos, start com rollback, shutdown reverso, barramento de eventos em memória |
 | Web | `liga-web` | Axum + Tokio, envelope JSON para erros, `ApiEnvelope<T>`/`ApiMeta` para sucesso versionado v1, extractors consistentes, request-id, tracing, timeout, limites e `TestClient` sem porta |
 | Automação | `liga-tasks` | Runner local com concorrência limitada, timeout por tentativa, retry só para erros transitórios (backoff exponencial + jitter), cancelamento e shutdown com prazo |
-| IA | `liga-ai` | `ModelProvider` neutro, `Tool` tipada com permissões, `Policy` deny-by-default, `Agent` limitado por passos, tempo, chamadas e tamanho, `ScriptedProvider` para testes |
+| IA | `liga-ai` | `ModelProvider` neutro, `Tool` tipada com permissões, `Policy` deny-by-default, `AetherAgent` limitado por passos, tempo, chamadas e tamanho, `ScriptedProvider` para testes |
 | Facade | `liga` | `AetherApplication::builder()`, `prelude`, features `web` (padrão), `logging` (padrão), `tasks`, `ai` e `full` |
 
 O `liga-core` não depende de HTTP nem de IA. Com `--no-default-features`, o `liga` não compila axum nem hyper.
