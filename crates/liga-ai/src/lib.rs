@@ -37,9 +37,30 @@ pub type AetherAgentBuilder = AgentBuilder;
 pub type AetherAgentError = AgentError;
 /// Official Aether name for AgentOutcome.
 pub type AetherAgentOutcome = AgentOutcome;
+/// Official Aether names for agent configuration and results.
+pub type AetherAgentBuildError = AgentBuildError;
+pub type AetherLimits = Limits;
+pub type AetherToolCallOutcome = ToolCallOutcome;
+pub type AetherToolCallRecord = ToolCallRecord;
+
 /// Compatibility alias for the previous public branding.
 pub type LigaAgent = AetherAgent;
+
 pub use message::{Message, Role, ToolCall, Usage};
+pub use message::{
+    Message as AetherMessage, Role as AetherRole, ToolCall as AetherToolCall,
+    Usage as AetherUsage,
+};
 pub use policy::Policy;
+pub use policy::Policy as AetherPolicy;
 pub use provider::{ModelProvider, ModelRequest, ModelResponse, ProviderError, ProviderErrorKind};
+pub use provider::{
+    ModelProvider as AetherModelProvider, ModelRequest as AetherModelRequest,
+    ModelResponse as AetherModelResponse, ProviderError as AetherProviderError,
+    ProviderErrorKind as AetherProviderErrorKind,
+};
 pub use tool::{Permission, Tool, ToolContext, ToolError, ToolSpec};
+pub use tool::{
+    Permission as AetherPermission, Tool as AetherTool, ToolContext as AetherToolContext,
+    ToolError as AetherToolError, ToolSpec as AetherToolSpec,
+};
