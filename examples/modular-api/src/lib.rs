@@ -6,7 +6,7 @@
 //!   flaky gateway as a background task with bounded retries, and drains its
 //!   task runner on shutdown.
 //!
-//! Modules are registered in any order; Liga starts them dependencies-first.
+//! Modules are registered in any order; AETHER starts them dependencies-first.
 
 use std::sync::{Arc, Mutex, PoisonError};
 use std::time::Duration;
@@ -89,12 +89,12 @@ impl Accounts {
 #[derive(Debug, Clone, Copy)]
 pub struct AccountsModule;
 
-impl Module for AccountsModule {
+impl AetherModule for AccountsModule {
     fn name(&self) -> &'static str {
         "accounts"
     }
 
-    fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
+    fn register(&self, ctx: &mut AetherModuleContext<'_>) -> Result<(), AetherModuleError> {
         ctx.provide(Accounts::default())?;
         ctx.contribute(Routes::new().route("/accounts", get(list_accounts).post(create_account)));
         Ok(())
@@ -107,7 +107,7 @@ async fn list_accounts(accounts: Dep<Accounts>) -> Json<Vec<Account>> {
 
 async fn create_account(
     accounts: Dep<Accounts>,
-    events: Dep<EventBus>,
+    events: Dep<AetherEventBus>,
     ValidJson(new): ValidJson<NewAccount>,
 ) -> (StatusCode, Json<Account>) {
     let account = accounts.create(new.email.trim().to_lowercase());
@@ -151,7 +151,7 @@ impl AuditLog {
 #[derive(Debug, Clone, Copy)]
 pub struct AuditModule;
 
-impl Module for AuditModule {
+impl AetherModule for AuditModule {
     fn name(&self) -> &'static str {
         "audit"
     }
@@ -160,7 +160,7 @@ impl Module for AuditModule {
         &["accounts"]
     }
 
-    fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
+    fn register(&self, ctx: &mut AetherModuleContext<'_>) -> Result<(), AetherModuleError> {
         let log = Arc::new(AuditLog::default());
         ctx.provide_arc(log.clone())?;
         ctx.events().subscribe(move |event: Arc<AccountCreated>| {
@@ -277,7 +277,7 @@ async fn send_via_flaky_gateway(attempt: u32) -> Result<(), TaskError> {
 #[derive(Debug, Clone, Copy)]
 pub struct NotificationsModule;
 
-impl Module for NotificationsModule {
+impl AetherModule for NotificationsModule {
     fn name(&self) -> &'static str {
         "notifications"
     }
@@ -286,7 +286,7 @@ impl Module for NotificationsModule {
         &["accounts"]
     }
 
-    fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
+    fn register(&self, ctx: &mut AetherModuleContext<'_>) -> Result<(), AetherModuleError> {
         let config: NotificationsConfig = ctx.config_section("notifications")?;
         let runner = TaskRunner::builder()
             .max_concurrency(config.max_concurrent_sends)
@@ -332,7 +332,7 @@ impl Module for NotificationsModule {
         Ok(())
     }
 
-    async fn shutdown(&self, ctx: &AppContext) -> Result<(), ModuleError> {
+    async fn shutdown(&self, ctx: &AetherAppContext) -> Result<(), AetherModuleError> {
         let runner = ctx.require::<TaskRunner>()?;
         let config = ctx.require::<NotificationsConfig>()?;
         let report = runner
@@ -353,8 +353,8 @@ async fn list_notifications(outbox: Dep<Outbox>) -> Json<Vec<SentEmail>> {
 }
 
 /// The application. Module order here is irrelevant.
-pub fn app_builder() -> ApplicationBuilder {
-    Application::builder()
+pub fn app_builder() -> AetherApplicationBuilder {
+    AetherApplication::builder()
         .name("modular-api")
         .optional_config_file("modular-api.toml")
         .env_prefix("MODULAR")
