@@ -8,7 +8,7 @@ Status: **proposed architecture decision for review** (2026-10). This document r
 - **ATLAS** — the Rust frontend framework for browser interfaces compiled to WebAssembly (WASM).
 - **TITAN** — the Rust backend HTTP framework for APIs and services.
 
-These are the public product/repository names for the family. The names currently used inside the codebases — **Liga** (`liga-*`), **Patina** (`patina-*`) and **Ferrovia** (`ferrovia-*`) — are treated as existing internal/package identities during a compatibility transition. Do not rename Cargo packages, Rust crate imports, environment-variable prefixes, examples or public symbols as part of this documentation-only decision. Any rename requires a separate migration plan, impact inventory and explicit approval.
+These are the public product/repository names for the family. The current package namespaces remain **Liga** (`liga-*`), **Patina** (`patina-*`) and **Ferrovia** (`ferrovia-*`) during a compatibility transition. The public APIs now expose additive, repository-branded names such as `AetherApplication`, `AetherModule`, `AetherAgent`, `AtlasView` and `TitanServerConfig`. Existing generic names and older branded aliases remain available for compatibility. Cargo packages/imports and environment-variable prefixes are not renamed in this API pass; a package/path migration needs its own impact inventory, plan and explicit approval.
 
 ## AETHER's role
 
@@ -39,8 +39,8 @@ AETHER is optional at the application-composition layer. It can host application
 
 - Product/repository brand: AETHER.
 - Current package namespace: `liga-*` (observed in the workspace manifest).
-- Public Rust API: existing crate names and symbols remain unchanged until a separate approved migration.
-- A future rename must inventory imports, examples, docs, feature names, environment variables, lockfiles and downstream users; provide migration notes and a deprecation window where practical.
+- Public Rust API: repository-branded aliases are the recommended names for new code; generic and legacy aliases remain available for compatibility.
+- A future Cargo package/crate rename must inventory imports, examples, docs, feature names, environment variables, lockfiles and downstream users; provide migration notes and a deprecation window where practical.
 
 ## Delivery sequence
 
