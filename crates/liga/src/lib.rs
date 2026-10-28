@@ -101,7 +101,7 @@ pub mod prelude {
 
     #[cfg(feature = "ai")]
     pub use liga_ai::{
-        AetherAgent, Agent, ModelProvider, Permission, Policy, Tool, ToolContext, ToolError,
-        ToolSpec, LigaAgent,
+        AetherAgent, Agent, LigaAgent, ModelProvider, Permission, Policy, Tool, ToolContext,
+        ToolError, ToolSpec,
     };
 }
