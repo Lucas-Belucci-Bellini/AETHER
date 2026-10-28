@@ -103,8 +103,7 @@ pub mod prelude {
     pub use crate::{
         AetherApp, AetherAppContext, AetherApplication, AetherApplicationBuilder, AetherError,
         AetherEventBus, AetherEventError, AetherModule, AetherModuleContext, AetherModuleError,
-        App, Application,
-        ApplicationBuilder, Error, LigaApp, LigaApplication,
+        App, Application, ApplicationBuilder, Error, LigaApp, LigaApplication,
     };
     pub use liga_core::{AppContext, Config, Secret, Validate, ValidationErrors};
     pub use liga_modules::{EventBus, EventError, Module, ModuleContext, ModuleError};
