@@ -31,6 +31,10 @@ Em testes, `app.test_client()` exercita o router inteiro sem abrir porta, e `app
 O trait oficial exportado para novos códigos se chama `AetherModule`. O nome genérico `Module` continua disponível para compatibilidade.
 
 ```rust
+use liga::prelude::*;
+
+struct CatalogModule;
+
 impl AetherModule for CatalogModule {
     fn name(&self) -> &'static str { "catalog" }
 
