@@ -53,8 +53,9 @@ pub use app::{App, Application, ApplicationBuilder, Error};
 pub type AetherApplication = Application;
 /// Official Aether name for App.
 pub type AetherApp = App;
-/// Compatibility aliases for the previous public branding.
+/// Compatibility alias for the previous public Application name.
 pub type LigaApplication = AetherApplication;
+/// Compatibility alias for the previous public App name.
 pub type LigaApp = AetherApp;
 
 pub use liga_core as core;
