@@ -70,6 +70,29 @@ pub use liga_modules::EventBus as AetherEventBus;
 /// Official Aether name for event dispatch errors.
 pub use liga_modules::EventError as AetherEventError;
 
+/// Official Aether names for core configuration and validation types.
+pub type AetherConfig = liga_core::Config;
+pub type AetherConfigError = liga_core::ConfigError;
+pub type AetherConfigLoader = liga_core::ConfigLoader;
+pub type AetherFieldError = liga_core::FieldError;
+pub type AetherStateError = liga_core::StateError;
+pub type AetherStateMap = liga_core::StateMap;
+pub type AetherSecret<T> = liga_core::Secret<T>;
+pub type AetherShutdown = liga_core::Shutdown;
+pub type AetherValidationErrors = liga_core::ValidationErrors;
+pub use liga_core::Validate as AetherValidate;
+
+/// Official Aether names for module orchestration and events.
+pub type AetherContributions = liga_modules::Contributions;
+pub type AetherDelivery = liga_modules::Delivery;
+pub type AetherPublishError = liga_modules::PublishError;
+pub type AetherSubscription = liga_modules::Subscription;
+pub type AetherModulesError = liga_modules::ModulesError;
+pub type AetherLifecycleOptions = liga_modules::LifecycleOptions;
+pub type AetherModuleSet = liga_modules::ModuleSet;
+pub type AetherResolvedModules = liga_modules::ResolvedModules;
+pub type AetherRunningModules = liga_modules::RunningModules;
+
 /// Compatibility aliases for the previous public Application name.
 pub type LigaApplication = AetherApplication;
 /// Compatibility alias for the previous public App name.
@@ -82,6 +105,30 @@ pub use liga_modules as modules;
 pub use liga_ai as ai;
 #[cfg(feature = "tasks")]
 pub use liga_tasks as tasks;
+#[cfg(feature = "tasks")]
+pub type AetherSpawnError = liga_tasks::SpawnError;
+#[cfg(feature = "tasks")]
+pub type AetherTaskError = liga_tasks::TaskError;
+#[cfg(feature = "tasks")]
+pub type AetherTaskFailure = liga_tasks::TaskFailure;
+#[cfg(feature = "tasks")]
+pub type AetherRetryPolicy = liga_tasks::RetryPolicy;
+#[cfg(feature = "tasks")]
+pub type AetherShutdownReport = liga_tasks::ShutdownReport;
+#[cfg(feature = "tasks")]
+pub type AetherTaskContext = liga_tasks::TaskContext;
+#[cfg(feature = "tasks")]
+pub type AetherTaskHandle<T> = liga_tasks::TaskHandle<T>;
+#[cfg(feature = "tasks")]
+pub type AetherTaskId = liga_tasks::TaskId;
+#[cfg(feature = "tasks")]
+pub type AetherTaskRunner = liga_tasks::TaskRunner;
+#[cfg(feature = "tasks")]
+pub type AetherTaskRunnerBuilder = liga_tasks::TaskRunnerBuilder;
+#[cfg(feature = "tasks")]
+pub type AetherTaskSpec = liga_tasks::TaskSpec;
+#[cfg(feature = "tasks")]
+pub type AetherTaskStatus = liga_tasks::TaskStatus;
 #[cfg(feature = "web")]
 pub use liga_web as web;
 
@@ -101,9 +148,14 @@ pub fn init_tracing() {
 /// The names most applications need.
 pub mod prelude {
     pub use crate::{
-        AetherApp, AetherAppContext, AetherApplication, AetherApplicationBuilder, AetherError,
-        AetherEventBus, AetherEventError, AetherModule, AetherModuleContext, AetherModuleError,
-        App, Application, ApplicationBuilder, Error, LigaApp, LigaApplication,
+        AetherApp, AetherAppContext, AetherApplication, AetherApplicationBuilder, AetherConfig,
+        AetherConfigError, AetherConfigLoader, AetherContributions, AetherDelivery, AetherError,
+        AetherEventBus, AetherEventError, AetherFieldError, AetherLifecycleOptions,
+        AetherModule, AetherModuleContext, AetherModuleError, AetherModuleSet, AetherModulesError,
+        AetherPublishError, AetherResolvedModules, AetherRunningModules, AetherSecret,
+        AetherShutdown, AetherStateError, AetherStateMap, AetherSubscription, AetherValidate,
+        AetherValidationErrors, App, Application, ApplicationBuilder, Error, LigaApp,
+        LigaApplication,
     };
     pub use liga_core::{AppContext, Config, Secret, Validate, ValidationErrors};
     pub use liga_modules::{EventBus, EventError, Module, ModuleContext, ModuleError};
@@ -115,6 +167,12 @@ pub mod prelude {
     #[cfg(feature = "web")]
     pub use liga_web::{ApiError, ApiResult, Dep, Json, Path, Query, RequestId, Routes, ValidJson};
 
+    #[cfg(feature = "tasks")]
+    pub use crate::{
+        AetherRetryPolicy, AetherShutdownReport, AetherSpawnError, AetherTaskContext, AetherTaskError,
+        AetherTaskFailure, AetherTaskHandle, AetherTaskId, AetherTaskRunner, AetherTaskRunnerBuilder,
+        AetherTaskSpec, AetherTaskStatus,
+    };
     #[cfg(feature = "tasks")]
     pub use liga_tasks::{RetryPolicy, TaskContext, TaskError, TaskRunner, TaskSpec};
 
