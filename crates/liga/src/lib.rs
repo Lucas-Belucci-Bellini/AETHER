@@ -53,7 +53,22 @@ pub use app::{App, Application, ApplicationBuilder, Error};
 pub type AetherApplication = Application;
 /// Official Aether name for App.
 pub type AetherApp = App;
-/// Compatibility alias for the previous public Application name.
+/// Official Aether name for ApplicationBuilder.
+pub type AetherApplicationBuilder = ApplicationBuilder;
+/// Official Aether name for the framework's application error.
+pub type AetherError = Error;
+/// Official Aether name for modules.
+pub use liga_modules::Module as AetherModule;
+/// Official Aether name for the module registration context.
+pub type AetherModuleContext<'a> = liga_modules::ModuleContext<'a>;
+/// Official Aether name for module registration errors.
+pub type AetherModuleError = liga_modules::ModuleError;
+/// Official Aether name for the module event bus.
+pub use liga_modules::EventBus as AetherEventBus;
+/// Official Aether name for event dispatch errors.
+pub use liga_modules::EventError as AetherEventError;
+
+/// Compatibility aliases for the previous public Application name.
 pub type LigaApplication = AetherApplication;
 /// Compatibility alias for the previous public App name.
 pub type LigaApp = AetherApp;
@@ -84,8 +99,9 @@ pub fn init_tracing() {
 /// The names most applications need.
 pub mod prelude {
     pub use crate::{
-        AetherApp, AetherApplication, App, Application, ApplicationBuilder, Error, LigaApp,
-        LigaApplication,
+        AetherApp, AetherApplication, AetherApplicationBuilder, AetherError, AetherEventBus,
+        AetherEventError, AetherModule, AetherModuleContext, AetherModuleError, App, Application,
+        ApplicationBuilder, Error, LigaApp, LigaApplication,
     };
     pub use liga_core::{AppContext, Config, Secret, Validate, ValidationErrors};
     pub use liga_modules::{EventBus, EventError, Module, ModuleContext, ModuleError};
