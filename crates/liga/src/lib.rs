@@ -1,12 +1,49 @@
-//! Liga — modular backend framework for Rust.
-//! LigaApplication and LigaApp are framework-branded names for the existing
-//! Application and App types. The original names remain available.
+//! # Liga
 //!
-//! Example:
+//! A modular backend framework for Rust: start with a small HTTP API, grow
+//! into explicit modules with events, background tasks and permissioned AI
+//! agents, without rewriting the foundation.
+//!
+//! ```no_run
 //! use liga::prelude::*;
-//! LigaApplication::builder().name("hello");
 //!
-//! Features: web (default), logging (default), tasks, ai and full.
+//! struct Hello;
+//!
+//! impl Module for Hello {
+//!     fn name(&self) -> &'static str { "hello" }
+//!
+//!     fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
+//!         ctx.contribute(Routes::new().route("/hello", get(|| async { "hello, liga" })));
+//!         Ok(())
+//!     }
+//! }
+//!
+//! #[tokio::main]
+//! async fn main() -> Result<(), liga::Error> {
+//!     liga::init_tracing();
+//!     Application::builder()
+//!         .name("hello")
+//!         .env_prefix("HELLO")          // HELLO__SERVER__ADDR=0.0.0.0:8080
+//!         .module(Hello)
+//!         .build()
+//!         .await?
+//!         .serve()
+//!         .await
+//! }
+//! ```
+//!
+//! ## Features
+//!
+//! | feature   | default | adds |
+//! |-----------|---------|------|
+//! | `web`     | yes     | [`web`]: HTTP server, routes, JSON errors, middleware |
+//! | `logging` | yes     | [`init_tracing`] (tracing-subscriber) |
+//! | `tasks`   | no      | [`tasks`]: local task runner |
+//! | `ai`      | no      | [`ai`]: providers, tools, policy, agent |
+//! | `full`    | no      | all of the above |
+//!
+//! The core and module system are always available; nothing about HTTP or AI
+//! is compiled unless its feature is enabled.
 
 mod app;
 
@@ -27,6 +64,9 @@ pub use liga_tasks as tasks;
 #[cfg(feature = "web")]
 pub use liga_web as web;
 
+/// Installs a `tracing` subscriber that prints to stdout.
+///
+/// Filtering follows `RUST_LOG` (default `info`). Calling it twice is harmless.
 #[cfg(feature = "logging")]
 pub fn init_tracing() {
     use tracing_subscriber::EnvFilter;
@@ -54,5 +94,7 @@ pub mod prelude {
     pub use liga_tasks::{RetryPolicy, TaskContext, TaskError, TaskRunner, TaskSpec};
 
     #[cfg(feature = "ai")]
-    pub use liga_ai::{Agent, LigaAgent, ModelProvider, Permission, Policy, Tool, ToolContext, ToolError, ToolSpec};
+    pub use liga_ai::{
+        Agent, LigaAgent, ModelProvider, Permission, Policy, Tool, ToolContext, ToolError, ToolSpec,
+    };
 }
