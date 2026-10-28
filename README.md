@@ -1,9 +1,8 @@
-# Liga
+# AETHER — framework modular para aplicações Rust
 
-> **Liga** (substantivo): mistura de metais que resulta num material mais forte do que cada um isolado.
-> Aqui: Web, módulos e IA/automação fundidos num núcleo pequeno, em Rust.
+AETHER combina HTTP, módulos, tarefas em segundo plano e agentes de IA com permissões explícitas num framework modular escrito em Rust.
 
-Um framework backend para Rust que começa como uma API HTTP pequena e cresce, sem reescrever a base, para um serviço modular com eventos, tarefas em segundo plano e agentes de IA com permissões explícitas.
+Os nomes oficiais da API pública seguem o repositório: `AetherApplication`, `AetherApplicationBuilder`, `AetherModule`, `AetherAppContext` e `AetherAgent`. Os nomes anteriores continuam disponíveis para compatibilidade; os nomes dos crates `liga-*` permanecem inalterados nesta etapa.
 
 ```rust
 use liga::prelude::*;
@@ -14,7 +13,7 @@ impl Module for Hello {
     fn name(&self) -> &'static str { "hello" }
 
     fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
-        ctx.contribute(Routes::new().route("/hello", get(|| async { "olá, liga" })));
+        ctx.contribute(Routes::new().route("/hello", get(|| async { "olá, AETHER" })));
         Ok(())
     }
 }
@@ -22,7 +21,7 @@ impl Module for Hello {
 #[tokio::main]
 async fn main() -> Result<(), liga::Error> {
     liga::init_tracing();
-    Application::builder()
+    AetherApplication::builder()
         .name("hello")
         .env_prefix("HELLO")          // HELLO__SERVER__ADDR=0.0.0.0:8080
         .module(Hello)
@@ -54,7 +53,7 @@ async fn main() -> Result<(), liga::Error> {
 | Web | `liga-web` | Axum + Tokio, envelope JSON para erros, `ApiEnvelope<T>`/`ApiMeta` para sucesso versionado v1, extractors consistentes, request-id, tracing, timeout, limites e `TestClient` sem porta |
 | Automação | `liga-tasks` | Runner local com concorrência limitada, timeout por tentativa, retry só para erros transitórios (backoff exponencial + jitter), cancelamento e shutdown com prazo |
 | IA | `liga-ai` | `ModelProvider` neutro, `Tool` tipada com permissões, `Policy` deny-by-default, `Agent` limitado por passos, tempo, chamadas e tamanho, `ScriptedProvider` para testes |
-| Facade | `liga` | `Application::builder()`, `prelude`, features `web` (padrão), `logging` (padrão), `tasks`, `ai` e `full` |
+| Facade | `liga` | `AetherApplication::builder()`, `prelude`, features `web` (padrão), `logging` (padrão), `tasks`, `ai` e `full` |
 
 O `liga-core` não depende de HTTP nem de IA. Com `--no-default-features`, o `liga` não compila axum nem hyper.
 
