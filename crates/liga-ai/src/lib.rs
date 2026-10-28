@@ -29,8 +29,10 @@ pub use agent::{
     ToolCallRecord,
 };
 
-/// Framework-branded name for Agent.
-pub type LigaAgent = Agent;
+/// Official Aether name for Agent.
+pub type AetherAgent = Agent;
+/// Compatibility alias for the previous public branding.
+pub type LigaAgent = AetherAgent;
 pub use message::{Message, Role, ToolCall, Usage};
 pub use policy::Policy;
 pub use provider::{ModelProvider, ModelRequest, ModelResponse, ProviderError, ProviderErrorKind};
