@@ -14,7 +14,8 @@ use std::sync::{Arc, Mutex, PoisonError};
 use std::time::Duration;
 
 use liga::ai::{
-    AetherAgent, AetherAgentError, Message, ModelRequest, ModelResponse, ProviderError, Role, ToolCallOutcome,
+    AetherAgent, AetherAgentError, Message, ModelRequest, ModelResponse, ProviderError, Role,
+    ToolCallOutcome,
 };
 use liga::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -341,7 +342,10 @@ fn outcome_label(outcome: &ToolCallOutcome) -> &'static str {
     }
 }
 
-async fn ask(agent: Dep<AetherAgent>, ValidJson(body): ValidJson<Question>) -> ApiResult<Json<Answer>> {
+async fn ask(
+    agent: Dep<AetherAgent>,
+    ValidJson(body): ValidJson<Question>,
+) -> ApiResult<Json<Answer>> {
     let outcome = agent.run(body.question).await.map_err(|err| match err {
         AetherAgentError::Timeout { .. } => ApiError::timeout(),
         AetherAgentError::Provider(source) => {
