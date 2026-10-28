@@ -9,17 +9,17 @@
 //!
 //! struct Hello;
 //!
-//! impl Module for Hello {
+//! impl AetherModule for Hello {
 //!     fn name(&self) -> &'static str { "hello" }
 //!
-//!     fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
+//!     fn register(&self, ctx: &mut AetherModuleContext<'_>) -> Result<(), AetherModuleError> {
 //!         ctx.contribute(Routes::new().route("/hello", get(|| async { "hello, aether" })));
 //!         Ok(())
 //!     }
 //! }
 //!
 //! #[tokio::main]
-//! async fn main() -> Result<(), liga::Error> {
+//! async fn main() -> Result<(), liga::AetherError> {
 //!     liga::init_tracing();
 //!     AetherApplication::builder()
 //!         .name("hello")
