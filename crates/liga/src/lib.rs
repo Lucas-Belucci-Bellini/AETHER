@@ -62,7 +62,7 @@ pub use liga_modules::Module as AetherModule;
 /// Official Aether name for the module registration context.
 pub type AetherModuleContext<'a> = liga_modules::ModuleContext<'a>;
 /// Official Aether name for module registration errors.
-pub type AetherModuleError = liga_modules::ModuleError;
+pub type AetherModuleError = liga_modules::AetherModuleError;
 /// Official Aether name for the application context.
 pub type AetherAppContext = liga_core::AppContext;
 /// Official Aether name for the module event bus.
@@ -106,7 +106,7 @@ pub mod prelude {
         App, Application, ApplicationBuilder, Error, LigaApp, LigaApplication,
     };
     pub use liga_core::{AppContext, Config, Secret, Validate, ValidationErrors};
-    pub use liga_modules::{EventBus, EventError, Module, ModuleContext, ModuleError};
+    pub use liga_modules::{EventBus, EventError, Module, ModuleContext, AetherModuleError};
 
     #[cfg(feature = "web")]
     pub use liga_web::axum::http::StatusCode;
