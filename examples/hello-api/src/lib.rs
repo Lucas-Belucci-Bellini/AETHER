@@ -1,4 +1,4 @@
-//! A small product catalog served by Liga.
+//! A small product catalog served by AETHER.
 //!
 //! Routes:
 //! - `GET  /health`
@@ -172,12 +172,12 @@ impl Catalog {
 #[derive(Debug, Clone, Copy)]
 pub struct CatalogModule;
 
-impl Module for CatalogModule {
+impl AetherModule for CatalogModule {
     fn name(&self) -> &'static str {
         "catalog"
     }
 
-    fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
+    fn register(&self, ctx: &mut AetherModuleContext<'_>) -> Result<(), AetherModuleError> {
         let config: CatalogConfig = ctx.config_section("catalog")?;
         let catalog = Catalog::new(config.max_products);
         if config.seed_demo_data {
@@ -187,7 +187,7 @@ impl Module for CatalogModule {
                         name: name.into(),
                         price_cents,
                     })
-                    .map_err(|e| ModuleError::with_source("could not seed demo data", e))?;
+                    .map_err(|e| AetherModuleError::with_source("could not seed demo data", e))?;
             }
         }
         ctx.provide(catalog)?;
@@ -230,8 +230,8 @@ async fn create_product(
 
 /// The application, ready to `build()`. Configuration: optional
 /// `hello-api.toml`, then `HELLO__*` environment variables.
-pub fn app_builder() -> ApplicationBuilder {
-    Application::builder()
+pub fn app_builder() -> AetherApplicationBuilder {
+    AetherApplication::builder()
         .name("hello-api")
         .optional_config_file("hello-api.toml")
         .env_prefix("HELLO")

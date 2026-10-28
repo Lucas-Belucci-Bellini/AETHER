@@ -1,4 +1,4 @@
-//! `POST /assistant/ask` answers questions with a Liga [`Agent`] that can use
+//! `POST /assistant/ask` answers questions with an AETHER [`AetherAgent`] that can use
 //! two tools:
 //!
 //! | tool                  | permission      | granted by default |
@@ -14,7 +14,8 @@ use std::sync::{Arc, Mutex, PoisonError};
 use std::time::Duration;
 
 use liga::ai::{
-    AgentError, Message, ModelRequest, ModelResponse, ProviderError, Role, ToolCallOutcome,
+    AetherAgent, AetherAgentError, Message, ModelRequest, ModelResponse, ProviderError, Role,
+    ToolCallOutcome,
 };
 use liga::prelude::*;
 use serde::{Deserialize, Serialize};
@@ -253,12 +254,12 @@ impl Validate for AssistantConfig {
 #[derive(Debug, Clone, Copy)]
 pub struct AssistantModule;
 
-impl Module for AssistantModule {
+impl AetherModule for AssistantModule {
     fn name(&self) -> &'static str {
         "assistant"
     }
 
-    fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
+    fn register(&self, ctx: &mut AetherModuleContext<'_>) -> Result<(), AetherModuleError> {
         let config: AssistantConfig = ctx.config_section("assistant")?;
         let tickets = Arc::new(Tickets::default());
 
@@ -266,7 +267,7 @@ impl Module for AssistantModule {
         if config.allow_ticket_creation {
             policy = policy.grant("tickets.write");
         }
-        let agent = Agent::builder()
+        let agent = AetherAgent::builder()
             .provider(KeywordModel)
             .system_prompt("You help the team track the project. Use tools; never invent data.")
             .tool(ReadProjectStatus)
@@ -277,7 +278,7 @@ impl Module for AssistantModule {
             .max_steps(config.max_steps)
             .timeout(Duration::from_millis(config.timeout_ms))
             .build()
-            .map_err(|e| ModuleError::with_source("invalid agent configuration", e))?;
+            .map_err(|e| AetherModuleError::with_source("invalid agent configuration", e))?;
 
         ctx.provide(agent)?;
         ctx.provide_arc(tickets)?;
@@ -341,10 +342,13 @@ fn outcome_label(outcome: &ToolCallOutcome) -> &'static str {
     }
 }
 
-async fn ask(agent: Dep<Agent>, ValidJson(body): ValidJson<Question>) -> ApiResult<Json<Answer>> {
+async fn ask(
+    agent: Dep<AetherAgent>,
+    ValidJson(body): ValidJson<Question>,
+) -> ApiResult<Json<Answer>> {
     let outcome = agent.run(body.question).await.map_err(|err| match err {
-        AgentError::Timeout { .. } => ApiError::timeout(),
-        AgentError::Provider(source) => {
+        AetherAgentError::Timeout { .. } => ApiError::timeout(),
+        AetherAgentError::Provider(source) => {
             ApiError::service_unavailable("the model provider is unavailable").with_source(source)
         }
         other => ApiError::new(
@@ -368,8 +372,8 @@ async fn ask(agent: Dep<Agent>, ValidJson(body): ValidJson<Question>) -> ApiResu
 }
 
 /// The application.
-pub fn app_builder() -> ApplicationBuilder {
-    Application::builder()
+pub fn app_builder() -> AetherApplicationBuilder {
+    AetherApplication::builder()
         .name("ai-tool-server")
         .optional_config_file("ai-tool-server.toml")
         .env_prefix("ASSISTANT")

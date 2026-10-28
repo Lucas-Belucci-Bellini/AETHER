@@ -1,28 +1,27 @@
-# Liga
+# AETHER — framework modular para aplicações Rust
 
-> **Liga** (substantivo): mistura de metais que resulta num material mais forte do que cada um isolado.
-> Aqui: Web, módulos e IA/automação fundidos num núcleo pequeno, em Rust.
+AETHER combina HTTP, módulos, tarefas em segundo plano e agentes de IA com permissões explícitas num framework modular escrito em Rust.
 
-Um framework backend para Rust que começa como uma API HTTP pequena e cresce, sem reescrever a base, para um serviço modular com eventos, tarefas em segundo plano e agentes de IA com permissões explícitas.
+Os nomes oficiais da API pública seguem o repositório: `AetherApplication`, `AetherApplicationBuilder`, `AetherModule`, `AetherAppContext`, `AetherConfig`, `AetherTaskRunner`, `AetherApiError` e `AetherAgent`. O mesmo padrão é usado nos tipos de configuração, validação, eventos, tarefas, HTTP e ferramentas de IA. Os nomes genéricos continuam disponíveis para compatibilidade; os nomes dos crates `liga-*` permanecem inalterados nesta etapa.
 
 ```rust
 use liga::prelude::*;
 
 struct Hello;
 
-impl Module for Hello {
+impl AetherModule for Hello {
     fn name(&self) -> &'static str { "hello" }
 
-    fn register(&self, ctx: &mut ModuleContext<'_>) -> Result<(), ModuleError> {
-        ctx.contribute(Routes::new().route("/hello", get(|| async { "olá, liga" })));
+    fn register(&self, ctx: &mut AetherModuleContext<'_>) -> Result<(), AetherModuleError> {
+        ctx.contribute(Routes::new().route("/hello", get(|| async { "olá, AETHER" })));
         Ok(())
     }
 }
 
 #[tokio::main]
-async fn main() -> Result<(), liga::Error> {
+async fn main() -> Result<(), liga::AetherError> {
     liga::init_tracing();
-    Application::builder()
+    AetherApplication::builder()
         .name("hello")
         .env_prefix("HELLO")          // HELLO__SERVER__ADDR=0.0.0.0:8080
         .module(Hello)
@@ -50,11 +49,11 @@ async fn main() -> Result<(), liga::Error> {
 | Pilar | Crate | O que entrega |
 |---|---|---|
 | Núcleo | `liga-core` | Config em camadas (defaults < arquivo < ambiente) validada no startup, `AppContext`, estado tipado, `Shutdown`, `Secret<T>` |
-| Módulos | `liga-modules` | Trait `Module`, ordenação topológica, detecção de duplicatas, dependências ausentes e ciclos, start com rollback, shutdown reverso, barramento de eventos em memória |
+| Módulos | `liga-modules` | Trait `AetherModule`, ordenação topológica, detecção de duplicatas, dependências ausentes e ciclos, start com rollback, shutdown reverso, barramento de eventos em memória |
 | Web | `liga-web` | Axum + Tokio, envelope JSON para erros, `ApiEnvelope<T>`/`ApiMeta` para sucesso versionado v1, extractors consistentes, request-id, tracing, timeout, limites e `TestClient` sem porta |
 | Automação | `liga-tasks` | Runner local com concorrência limitada, timeout por tentativa, retry só para erros transitórios (backoff exponencial + jitter), cancelamento e shutdown com prazo |
-| IA | `liga-ai` | `ModelProvider` neutro, `Tool` tipada com permissões, `Policy` deny-by-default, `Agent` limitado por passos, tempo, chamadas e tamanho, `ScriptedProvider` para testes |
-| Facade | `liga` | `Application::builder()`, `prelude`, features `web` (padrão), `logging` (padrão), `tasks`, `ai` e `full` |
+| IA | `liga-ai` | `ModelProvider` neutro, `Tool` tipada com permissões, `Policy` deny-by-default, `AetherAgent` limitado por passos, tempo, chamadas e tamanho, `ScriptedProvider` para testes |
+| Facade | `liga` | `AetherApplication::builder()`, `prelude`, features `web` (padrão), `logging` (padrão), `tasks`, `ai` e `full` |
 
 O `liga-core` não depende de HTTP nem de IA. Com `--no-default-features`, o `liga` não compila axum nem hyper.
 

@@ -6,7 +6,7 @@
 //! ```
 
 #[tokio::main]
-async fn main() -> Result<(), liga::Error> {
+async fn main() -> Result<(), liga::AetherError> {
     liga::init_tracing();
     ai_tool_server::app_builder().build().await?.serve().await
 }
