@@ -131,6 +131,36 @@ pub type AetherTaskSpec = liga_tasks::TaskSpec;
 pub type AetherTaskStatus = liga_tasks::TaskStatus;
 #[cfg(feature = "web")]
 pub use liga_web as web;
+#[cfg(feature = "web")]
+pub type AetherApiEnvelope<T> = liga_web::ApiEnvelope<T>;
+#[cfg(feature = "web")]
+pub type AetherApiErrorBody = liga_web::ApiErrorBody;
+#[cfg(feature = "web")]
+pub type AetherApiErrorEnvelope = liga_web::ApiErrorEnvelope;
+#[cfg(feature = "web")]
+pub type AetherApiMeta = liga_web::ApiMeta;
+#[cfg(feature = "web")]
+pub type AetherApiError = liga_web::ApiError;
+#[cfg(feature = "web")]
+pub type AetherApiResult<T> = liga_web::ApiResult<T>;
+#[cfg(feature = "web")]
+pub type AetherDep<T> = liga_web::Dep<T>;
+#[cfg(feature = "web")]
+pub type AetherJson<T> = liga_web::Json<T>;
+#[cfg(feature = "web")]
+pub type AetherPath<T> = liga_web::Path<T>;
+#[cfg(feature = "web")]
+pub type AetherQuery<T> = liga_web::Query<T>;
+#[cfg(feature = "web")]
+pub type AetherValidJson<T> = liga_web::ValidJson<T>;
+#[cfg(feature = "web")]
+pub type AetherRoutes = liga_web::Routes;
+#[cfg(feature = "web")]
+pub type AetherRequestId = liga_web::RequestId;
+#[cfg(feature = "web")]
+pub type AetherWebServerConfig = liga_web::ServerConfig;
+#[cfg(feature = "web")]
+pub type AetherWebError = liga_web::WebError;
 
 /// Installs a `tracing` subscriber that prints to stdout.
 ///
@@ -161,6 +191,12 @@ pub mod prelude {
     pub use liga_modules::{EventBus, EventError, Module, ModuleContext, ModuleError};
 
     #[cfg(feature = "web")]
+    pub use crate::{
+        AetherApiEnvelope, AetherApiError, AetherApiErrorBody, AetherApiErrorEnvelope,
+        AetherApiMeta, AetherApiResult, AetherDep, AetherJson, AetherPath, AetherQuery,
+        AetherRequestId, AetherRoutes, AetherValidJson, AetherWebError, AetherWebServerConfig,
+    };
+    #[cfg(feature = "web")]
     pub use liga_web::axum::http::StatusCode;
     #[cfg(feature = "web")]
     pub use liga_web::axum::routing::{delete, get, patch, post, put};
@@ -178,7 +214,11 @@ pub mod prelude {
 
     #[cfg(feature = "ai")]
     pub use liga_ai::{
-        AetherAgent, AetherAgentBuilder, AetherAgentError, AetherAgentOutcome, Agent, LigaAgent,
-        ModelProvider, Permission, Policy, Tool, ToolContext, ToolError, ToolSpec,
+        AetherAgent, AetherAgentBuildError, AetherAgentBuilder, AetherAgentError,
+        AetherAgentOutcome, AetherLimits, AetherMessage, AetherModelProvider, AetherModelRequest,
+        AetherModelResponse, AetherPermission, AetherPolicy, AetherProviderError,
+        AetherProviderErrorKind, AetherRole, AetherTool, AetherToolCall, AetherToolCallOutcome,
+        AetherToolCallRecord, AetherToolContext, AetherToolError, AetherToolSpec, AetherUsage,
+        Agent, LigaAgent, ModelProvider, Permission, Policy, Tool, ToolContext, ToolError, ToolSpec,
     };
 }
