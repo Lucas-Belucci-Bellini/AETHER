@@ -2,7 +2,7 @@
 
 AETHER combina HTTP, módulos, tarefas em segundo plano e agentes de IA com permissões explícitas num framework modular escrito em Rust.
 
-Os nomes oficiais da API pública seguem o repositório: `AetherApplication`, `AetherApplicationBuilder`, `AetherModule`, `AetherAppContext` e `AetherAgent`. Os nomes anteriores continuam disponíveis para compatibilidade; os nomes dos crates `liga-*` permanecem inalterados nesta etapa.
+Os nomes oficiais da API pública seguem o repositório: `AetherApplication`, `AetherApplicationBuilder`, `AetherModule`, `AetherAppContext`, `AetherConfig`, `AetherTaskRunner`, `AetherApiError` e `AetherAgent`. O mesmo padrão é usado nos tipos de configuração, validação, eventos, tarefas, HTTP e ferramentas de IA. Os nomes genéricos continuam disponíveis para compatibilidade; os nomes dos crates `liga-*` permanecem inalterados nesta etapa.
 
 ```rust
 use liga::prelude::*;
