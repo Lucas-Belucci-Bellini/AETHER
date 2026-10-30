@@ -38,7 +38,7 @@ async fn main() -> Result<(), liga::AetherError> {
 
 | Verificação | Resultado |
 |---|---|
-| `cargo test --workspace --all-features` | 80 testes passando |
+| `cargo test --workspace --all-features` | suíte de testes do workspace; a contagem é intencionalmente omitida para não ficar obsoleta entre mudanças |
 | `cargo clippy --workspace --all-targets --all-features -- -D warnings` | sem avisos |
 | `cargo fmt --all -- --check` | ok |
 | `cargo check -p liga --no-default-features` (e cada feature isolada) | ok |
@@ -120,6 +120,7 @@ As variáveis de ambiente vencem o arquivo: `HELLO__CATALOG__MAX_PRODUCTS=50`. C
 - `liga-cli` (scaffolding de projeto e módulo).
 - OpenAPI gerado a partir das rotas.
 - Benchmarks reproduzíveis contra Axum puro (fase 5).
+- Testes de ciclo de vida dos módulos: a API pública verifica rollback apenas dos módulos iniciados e reporta timeout de shutdown sem pular hooks restantes. Esses cenários fazem parte dos testes de integração da crate `liga-modules`.
 - CI no GitHub: o workflow `Rust CI` já está ativo em `.github/workflows/ci.yml` e executa formatação, `cargo check`, testes com todas as features, Clippy com `-D warnings` e validação da MSRV 1.94. Para repetir a matriz ampliada localmente (incluindo isolamento de dependências), use `bash scripts/verify.sh`.
 - Revisar a licença escolhida (`MIT OR Apache-2.0`).
 
