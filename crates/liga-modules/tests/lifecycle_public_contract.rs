@@ -31,7 +31,10 @@ impl Module for HookModule {
     }
 
     async fn start(&self, _ctx: &AppContext) -> Result<(), ModuleError> {
-        self.log\n            .lock()\n            .unwrap_or_else(std::sync::PoisonError::into_inner)\n            .push(self.name);
+        self.log
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .push(self.name);
         if self.fails_to_start {
             return Err(ModuleError::new("deliberate start failure"));
         }
@@ -39,7 +42,10 @@ impl Module for HookModule {
     }
 
     async fn shutdown(&self, _ctx: &AppContext) -> Result<(), ModuleError> {
-        self.log.lock().unwrap().push(self.name);
+        self.log
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .push(self.name);
         tokio::time::sleep(self.shutdown_delay).await;
         Ok(())
     }
@@ -83,7 +89,12 @@ async fn public_lifecycle_api_rolls_back_only_started_modules() {
             ..
         }
     ));
-    assert_eq!(*events\n            .lock()\n            .unwrap_or_else(std::sync::PoisonError::into_inner),\n        ["database", "failing", "database"]);
+    assert_eq!(
+        *events
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner),
+        ["database", "failing", "database"]
+    );
 }
 
 #[tokio::test]
@@ -112,5 +123,10 @@ async fn shutdown_timeout_is_reported_without_skipping_remaining_hooks() {
         ModulesError::Shutdown(failures)
             if failures.len() == 1 && failures[0].0 == "slow"
     ));
-    assert!(events\n            .lock()\n            .unwrap_or_else(std::sync::PoisonError::into_inner)\n            .ends_with(&["fast", "slow"]));
+    assert!(
+        events
+            .lock()
+            .unwrap_or_else(std::sync::PoisonError::into_inner)
+            .ends_with(&["fast", "slow"])
+    );
 }
