@@ -44,7 +44,12 @@ impl Module for HookModule {
 }
 
 fn app_context() -> AppContext {
-    AppContext::new("lifecycle-contract-test", Config::default(), StateMap::new(), Shutdown::new())
+    AppContext::new(
+        "lifecycle-contract-test",
+        Config::default(),
+        StateMap::new(),
+        Shutdown::new(),
+    )
 }
 
 fn log() -> Log {
@@ -79,28 +84,13 @@ async fn shutdown_timeout_is_reported_without_skipping_remaining_hooks() {
     let mut slow = HookModule::new("slow", &events);
     slow.shutdown_delay = Duration::from_millis(100);
 
-    let running = ModuleSet::new()
-        .with(slow)
-        .with(HookModule::new("fast", &events))
-        .resolve()
-        .unwrap()
-        .start(&app_context(), LifecycleOptions::default())
-        .await
-        .unwrap();
-
     let options = LifecycleOptions {
         shutdown_timeout: Duration::from_millis(10),
         ..LifecycleOptions::default()
     };
-    // Rebuild with the short timeout: options are fixed when start creates RunningModules.
-    drop(running);
 
     let running = ModuleSet::new()
-        .with({
-            let mut slow = HookModule::new("slow", &events);
-            slow.shutdown_delay = Duration::from_millis(100);
-            slow
-        })
+        .with(slow)
         .with(HookModule::new("fast", &events))
         .resolve()
         .unwrap()
@@ -109,6 +99,10 @@ async fn shutdown_timeout_is_reported_without_skipping_remaining_hooks() {
         .unwrap();
 
     let error = running.shutdown(&app_context()).await.unwrap_err();
-    assert!(matches!(error, ModulesError::Shutdown(failures) if failures.len() == 1 && failures[0].0 == "slow"));
+    assert!(matches!(
+        error,
+        ModulesError::Shutdown(failures)
+            if failures.len() == 1 && failures[0].0 == "slow"
+    ));
     assert!(events.lock().unwrap().ends_with(&["fast", "slow"]));
 }
