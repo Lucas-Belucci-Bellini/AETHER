@@ -74,7 +74,13 @@ async fn public_lifecycle_api_rolls_back_only_started_modules() {
         .await
         .unwrap_err();
 
-    assert!(matches!(error, ModulesError::Start { module: "failing", .. }));
+    assert!(matches!(
+        error,
+        ModulesError::Start {
+            module: "failing",
+            ..
+        }
+    ));
     assert_eq!(*events.lock().unwrap(), ["database", "failing", "database"]);
 }
 
