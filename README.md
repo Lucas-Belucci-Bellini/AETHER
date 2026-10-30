@@ -120,7 +120,7 @@ As variáveis de ambiente vencem o arquivo: `HELLO__CATALOG__MAX_PRODUCTS=50`. C
 - `liga-cli` (scaffolding de projeto e módulo).
 - OpenAPI gerado a partir das rotas.
 - Benchmarks reproduzíveis contra Axum puro (fase 5).
-- CI no GitHub: ainda não foi criado por causa do congelamento da conta. Até lá, `bash scripts/verify.sh` roda localmente as mesmas checagens (fmt, clippy, testes, matriz de features, isolamento de dependências e MSRV).
+- CI no GitHub: o workflow `Rust CI` já está ativo em `.github/workflows/ci.yml` e executa formatação, `cargo check`, testes com todas as features, Clippy com `-D warnings` e validação da MSRV 1.94. Para repetir a matriz ampliada localmente (incluindo isolamento de dependências), use `bash scripts/verify.sh`.
 - Revisar a licença escolhida (`MIT OR Apache-2.0`).
 
 ## Licença
