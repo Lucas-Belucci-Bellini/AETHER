@@ -21,6 +21,15 @@ impl Policy {
         self
     }
 
+    /// Revokes a permission if it is currently granted.
+    ///
+    /// Revoking an absent permission is a no-op. This keeps policy composition
+    /// predictable and preserves deny-by-default behavior.
+    pub fn revoke(mut self, permission: impl Into<Permission>) -> Self {
+        self.granted.remove(&permission.into());
+        self
+    }
+
     /// `true` if `permission` was granted.
     pub fn is_granted(&self, permission: &Permission) -> bool {
         self.granted.contains(permission)
@@ -56,5 +65,30 @@ mod tests {
         assert_eq!(policy.check(&required), Err(&required[1]));
         let policy = policy.grant("files.write");
         assert_eq!(policy.check(&required), Ok(()));
+    }
+
+    #[test]
+    fn revoke_removes_only_the_requested_permission() {
+        let policy = Policy::deny_by_default()
+            .grant("files.read")
+            .grant("files.write")
+            .revoke("files.write");
+
+        assert!(policy.is_granted(&Permission::new("files.read")));
+        assert!(!policy.is_granted(&Permission::new("files.write")));
+        assert_eq!(
+            policy.granted().map(Permission::as_str).collect::<Vec<_>>(),
+            ["files.read"]
+        );
+    }
+
+    #[test]
+    fn revoking_an_absent_permission_is_a_noop() {
+        let policy = Policy::deny_by_default()
+            .grant("files.read")
+            .revoke("files.write");
+
+        assert!(policy.is_granted(&Permission::new("files.read")));
+        assert_eq!(policy.granted().count(), 1);
     }
 }
