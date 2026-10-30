@@ -31,14 +31,15 @@
 - Limites máximos de passos, retries, tempo e tokens/custo quando o provedor permitir medir.
 - Testes para prompt injection não conceder permissões adicionais à ferramenta.
 
-## CI inicial
+## CI ativo e evidências atuais
 
-1. Formatação: `cargo fmt --all -- --check`.
-2. Lints: `cargo clippy --workspace --all-targets --all-features -- -D warnings` (revisar se features incompatíveis tornam `all-features` inviável).
-3. Testes: workspace e exemplos.
-4. Auditoria de dependências com ferramenta mantida e política definida pelo projeto.
-5. Verificação de documentação e exemplos.
-6. Teste de build nas plataformas realmente suportadas.
+O workflow `Rust CI` em `.github/workflows/ci.yml` executa formatação, verificação do workspace, testes com todas as features, Clippy com avisos tratados como erros e validação da MSRV 1.94. O workflow `Dependency Security Audit` executa `cargo audit` sobre o `Cargo.lock`.
+
+Os testes públicos de lifecycle em `crates/liga-modules/tests/lifecycle_public_contract.rs` verificam:
+- rollback apenas dos módulos que iniciaram com sucesso quando um módulo posterior falha;
+- reporte de timeout no shutdown sem deixar de executar os hooks restantes.
+
+Resultados de workflow devem sempre ser consultados para o SHA exato da alteração. A existência do workflow não significa que toda execução futura passou.
 
 ## Política para benchmarks
 
